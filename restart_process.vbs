@@ -15,7 +15,7 @@ ProcessMemory = PName.WorkingSetSize/1048576
 'restarter raven og tilhørende services om "working set size" overskrider 10 gigabyte
 If ProcessMemory >= 10000 Then
          Set objShell = CreateObject("WScript.Shell")
-		 objShell.Run "net stop Artportalen.Services.AuditService-1.0.0 (Instance: nbn)"
+		 objShell.Run """net stop ""Artportalen.Services.AuditService-1.0.0 (Instance: nbn)"""""
 		 objShell.Run "net stop Artportalen.Services.ConvertService-1.0.0 (Instance: nbn)"
 		 objShell.Run "net stop Artportalen.Services.ConvertViewService-1.0.0 (Instance: nbn)"
 		 objShell.Run "net stop Artportalen.Services.ImportService-1.0.0 (Instance: nbn)"
