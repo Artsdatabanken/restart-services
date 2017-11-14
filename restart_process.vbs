@@ -11,7 +11,7 @@ ProcessName =  PName.Name
 ' WorkingSetSize/1048576, konverterer fra bytes til megabytes
 ProcessMemory = PName.WorkingSetSize/1048576
 
-wscript.echo processmemory
+'wscript.echo processmemory
 'restarter raven og tilhørende services om "working set size" overskrider 10 gigabyte
 If ProcessMemory >= 10000 Then
          Set objShell = CreateObject("WScript.Shell")
