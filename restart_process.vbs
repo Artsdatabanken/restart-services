@@ -2,18 +2,35 @@ Set objWMI = GetObject("winmgmts:\\.\root\cimv2")
 Set colObjects = objWMI.ExecQuery("Select * From Win32_Process where name='raven.server.exe'")
 
 Dim PName,objShell
+Dim dagenIDag, klokkeTime, skipping
+skipping = "0"
+'Henter hel klokketime
+klokkeTime = Hour(Now())
+
+'Finner dag og setter den til minuskler
+dagenIDag = LCase(WeekdayName(Weekday(Now())))
+
+'Sjekker om det er onsdag og om klokken er mellom 9.00 og 12.59, eller alle andre dager mellom 11.00 og 11.59. Dette er intervallene for cronjobbene med smuggler av Raven. 
+If ((klokkeTime >= 9 And klokkeTime <= 12) And (dagenIDag = "wednesday" Or dagenIDag = "onsdag")) Then
+	skipping = "1"
+ElseIf klokkeTime = 11 Then
+	skipping = "1"
+Else
+	skipping = "0"
+End If
 
 For Each Item in colObjects
     Set PName = Item
 Next
 
-ProcessName =  PName.Name
+ProcessName = PName.Name
 ' WorkingSetSize/1048576, konverterer fra bytes til megabytes
 ProcessMemory = PName.WorkingSetSize/1048576
 
+If skipping = "0" Then
 'wscript.echo processmemory
 'restarter raven og tilhørende services om "working set size" overskrider 10 gigabyte
-If ProcessMemory >= 10000 Then
+If ProcessMemory >= 13000 Then
          Set objShell = CreateObject("WScript.Shell")
  
 		 objShell.Run "net stop ""Artportalen.Services.AuditService-1.0.0 (Instance: nbn)"""
@@ -61,4 +78,7 @@ If ProcessMemory >= 10000 Then
 		 objFile.Close
 		 
          
+End If
+Else
+	'Skipper grunnet backup
 End If
