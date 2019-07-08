@@ -78,3 +78,4 @@ If skipping = "0" Then
 			 
 	End If
 End If
+WScript.Quit 0
